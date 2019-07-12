@@ -17,13 +17,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/reviews.sqlite"
 
 db = SQLAlchemy(app)
 
-from .models import Pet
+from .models import Review
 
-@app.before_first_request
-def setup():
-    # Recreate database each time for demo
-    # db.drop_all()
-    db.create_all()
+# @app.before_first_request
+# def setup():
+#     # Recreate database each time for demo
+#     # db.drop_all()
+#     db.create_all()
 
 # create route that renders index.html template
 @app.route("/")
@@ -35,12 +35,12 @@ def home():
 @app.route("/send", methods=["GET", "POST"])
 def send():
     if request.method == "POST":
-        name = request.form["petName"]
-        pet_type = request.form["petType"]
-        age = request.form["petAge"]
+        first = request.form["first"]
+        second = request.form["second"]
+        third = request.form["third"]
 
-        pet = Pet(name=name, type=pet_type, age=age)
-        db.session.add(pet)
+        review = Review(first=first, second=second, third=third)
+        db.session.add(review)
         db.session.commit()
         return redirect("/", code=302)
 
@@ -49,25 +49,13 @@ def send():
 
 
 @app.route("/api/reviews")
-def pals():
-    results = db.session.query(Pet.type, func.count(Pet.type)).group_by(Pet.type).all()
-
-    pet_type = [result[0] for result in results]
-    age = [result[1] for result in results]
-
-    trace = {
-        "x": pet_type,
-        "y": age,
-        "type": "bar"
-    }
-
-    return jsonify(trace)
+def wordcloud():
 
     #Define stopwords
-    stopwords = ['a', 'bad', 'good','br', 'film', 'movie', 'about', 'above', 'across', 'after', 'afterwards']
+    stopwords = ['and', 'bad', 'good','br', 'film', 'movie', 'about', 'above', 'across', 'after', 'afterwards']
 
     #Join all review words
-    review_words = db.session.query(Pet.type).all()
+    review_words = db.session.query(Review.first).all()
 
     # Generate a word cloud image based on bag of popcorn
     mask = np.array(Image.open("bag.jpg"))
@@ -75,7 +63,7 @@ def pals():
     wordcloud = WordCloud(width = 800, height = 800, 
                 background_color ='white', 
                 stopwords = stopwords, 
-                min_font_size = 10, max_font_size = 42,
+                min_font_size = 10, 
                 max_words=200,
                 mask=mask).generate(review_words) 
   

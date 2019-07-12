@@ -1,14 +1,14 @@
 from .app import db
 
 
-class Pet(db.Model):
-    __tablename__ = 'pets'
+class Review(db.Model):
+    __tablename__ = 'reviews'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64))
-    type = db.Column(db.String)
-    age = db.Column(db.Integer)
+    first = db.Column(db.String(64))
+    second = db.Column(db.String(64))
+    third = db.Column(db.String(64))
 
     def __repr__(self):
-        return '<Pet %r>' % (self.name)
+        return '<Review %r>' % (self.first)
 
