@@ -12,13 +12,18 @@ app = Flask(__name__)
 
 from flask_sqlalchemy import SQLAlchemy
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '') or "sqlite:///db/reviews.sqlite"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/reviews.sqlite"
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '')
 
 db = SQLAlchemy(app)
 
 from .models import Pet
 
+@app.before_first_request
+def setup():
+    # Recreate database each time for demo
+    db.drop_all()
+    db.create_all()
 
 # create route that renders index.html template
 @app.route("/")
@@ -31,10 +36,10 @@ def home():
 def send():
     if request.method == "POST":
         name = request.form["petName"]
-        lat = request.form["petLat"]
-        lon = request.form["petLon"]
+        pet_type = request.form["petType"]
+        age = request.form["petAge"]
 
-        pet = Pet(name=name, lat=lat, lon=lon)
+        pet = Pet(name=name, type=pet_type, age=age)
         db.session.add(pet)
         db.session.commit()
         return redirect("/", code=302)
@@ -42,31 +47,22 @@ def send():
     return render_template("form.html")
 
 
+
 @app.route("/api/reviews")
 def pals():
-    results = db.session.query(Pet.name, Pet.lat, Pet.lon).all()
+    results = db.session.query(Pet.type, func.count(Pet.type)).group_by(Pet.type).all()
 
-    hover_text = [result[0] for result in results]
-    lat = [result[1] for result in results]
-    lon = [result[2] for result in results]
+    pet_type = [result[0] for result in results]
+    age = [result[1] for result in results]
 
-    pet_data = [{
-        "type": "scattergeo",
-        "locationmode": "USA-states",
-        "lat": lat,
-        "lon": lon,
-        "text": hover_text,
-        "hoverinfo": "text",
-        "marker": {
-            "size": 50,
-            "line": {
-                "color": "rgb(8,8,8)",
-                "width": 1
-            },
-        }
-    }]
+    trace = {
+        "x": pet_type,
+        "y": age,
+        "type": "bar"
+    }
 
-    return jsonify(pet_data)
+    return jsonify(trace)
+
 
 
 if __name__ == "__main__":

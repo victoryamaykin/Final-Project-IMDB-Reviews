@@ -22,27 +22,28 @@
      <h1>Movie Trailer Reviews!</h1>
      <div class="container">
         <div class="jumbotron" style="text-align: center">
-          <h1>Movie Trailer Review</h1>
-          <a href="/" class="btn btn-primary" role="button">View Chart</a>
+          <h1>Please watch the movie trailer Review</h1>
+          <iframe width="900" height="506" src="https://www.youtube.com/embed/QZ6KIK7taGc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>          <a href="/" class="btn btn-primary" role="button">View Chart</a>
         </div>
         <div class="row">
           <div class="col-md-offset-2 col-md-8">
             <h2>Enter your three words for the movie reveiw below!</h2>
             <form method="POST" action="/send" role="form", name="petform">
-                <div class="form-group">
-                    <label for="inputName">Pet Name</label>
-                    <input type="text" class="form-control" id="inputName" name="petName" placeholder="Name">
-                </div>
-                <div class="form-group">
-                    <label for="inputLat">Pet Location Lat</label>
-                    <input type="text" class="form-control" id="inputLat" name="petLat" placeholder="Lat">
-                </div>
-                <div class="form-group">
-                    <label for="inputLon">Pet Location Lon</label>
-                    <input type="text" class="form-control" id="inputLon" name="petLon" placeholder="Lon">
-                </div>
-                <input type="submit" value="submit" class="btn btn-primary">
+              <div class="form-group">
+                <label for="inputName">Pet Name</label>
+                <input type="text" class="form-control" id="inputName" name="petName" placeholder="Name">
+              </div>
+              <div class="form-group">
+                <label for="inputType">Pet Type</label>
+                <input type="text" class="form-control" id="inputType" name="petType" placeholder="Type">
+              </div>
+              <div class="form-group">
+                <label for="inputAge">Pet Age</label>
+                <input type="text" class="form-control" id="inputAge" name="petAge" placeholder="Age">
+              </div>
+              <input type="submit" value="submit" class="btn btn-primary">
             </form>
+    
           </div>
         </div>
       </div>

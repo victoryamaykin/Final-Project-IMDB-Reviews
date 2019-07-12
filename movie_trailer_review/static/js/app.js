@@ -1,34 +1,24 @@
 function buildPlot() {
-    /* data route */
-  var url = "/api/reviews";
-  d3.json(url).then(function(response) {
+  /* data route */
+var url = "/api/reviews";
+d3.json(url).then(function(response) {
 
-    console.log(response);
+  console.log(response);
 
-    var data = response;
+  var data = [response];
 
-    var layout = {
-      scope: "usa",
-      title: "Reviews",
-      showlegend: false,
-      height: 600,
-            // width: 980,
-      geo: {
-        scope: "usa",
-        projection: {
-          type: "albers usa"
-        },
-        showland: true,
-        landcolor: "rgb(217, 217, 217)",
-        subunitwidth: 1,
-        countrywidth: 1,
-        subunitcolor: "rgb(255,255,255)",
-        countrycolor: "rgb(255,255,255)"
-      }
-    };
+  var layout = {
+    title: "Pet Pals",
+    xaxis: {
+      title: "Pet Type"
+    },
+    yaxis: {
+      title: "Number of Pals"
+    }
+  };
 
-    Plotly.newPlot("plot", data, layout);
-  });
+  Plotly.newPlot("plot", data, layout);
+});
 }
 
 buildPlot();
