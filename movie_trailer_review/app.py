@@ -12,12 +12,18 @@ app = Flask(__name__)
 
 from flask_sqlalchemy import SQLAlchemy
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/reviews.sqlite.sqbpro"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db.sqlite"
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '')
 
 db = SQLAlchemy(app)
 
-from .models import Review
+# reflect an existing database into a new model
+Base = automap_base()
+# reflect the tables
+Base.prepare(db.engine, reflect=True)
+
+# Save references to each table
+Reviews = Base.classes.reviews
 
 # @app.before_first_request
 # def setup():
@@ -39,7 +45,7 @@ def send():
         second = request.form["second"]
         third = request.form["third"]
 
-        review = Review(first=first, second=second, third=third)
+        review = Reviews(first=first, second=second, third=third)
         db.session.add(review)
         db.session.commit()
         return redirect("/", code=302)
@@ -55,7 +61,7 @@ def wordcloud():
     stopwords = ['and', 'bad', 'good','br', 'film', 'movie', 'about', 'above', 'across', 'after', 'afterwards']
 
     #Join all review words
-    review_words = db.session.query(Review.first).all()
+    review_words = db.session.query(Reviews.first).all()
 
     # Generate a word cloud image based on bag of popcorn
     mask = np.array(Image.open("bag.jpg"))
