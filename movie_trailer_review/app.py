@@ -42,7 +42,7 @@ def send():
     return render_template("form.html")
 
 
-@app.route("/api/pals")
+@app.route("/api/reviews")
 def pals():
     results = db.session.query(Pet.name, Pet.lat, Pet.lon).all()
 
