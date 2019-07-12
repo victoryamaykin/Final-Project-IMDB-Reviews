@@ -22,7 +22,7 @@ from .models import Pet
 @app.before_first_request
 def setup():
     # Recreate database each time for demo
-    db.drop_all()
+    # db.drop_all()
     db.create_all()
 
 # create route that renders index.html template
@@ -63,7 +63,28 @@ def pals():
 
     return jsonify(trace)
 
+    #Define stopwords
+    stopwords = ['a', 'bad', 'good','br', 'film', 'movie', 'about', 'above', 'across', 'after', 'afterwards']
 
+    #Join all review words
+    review_words = db.session.query(Pet.type).all()
+
+    # Generate a word cloud image based on bag of popcorn
+    mask = np.array(Image.open("bag.jpg"))
+
+    wordcloud = WordCloud(width = 800, height = 800, 
+                background_color ='white', 
+                stopwords = stopwords, 
+                min_font_size = 10, max_font_size = 42,
+                max_words=200,
+                mask=mask).generate(review_words) 
+  
+    # plot the WordCloud image                        
+    plt.figure(figsize = (8, 8), facecolor = None) 
+    plt.imshow(wordcloud, interpolation="bilinear") 
+    plt.axis("off") 
+    plt.tight_layout(pad = 0) 
+    plt.show()
 
 if __name__ == "__main__":
     app.run()
