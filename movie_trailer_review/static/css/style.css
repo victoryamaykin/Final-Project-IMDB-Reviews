@@ -12,6 +12,10 @@
   background-color: #f1f1f1;
 }
 
+h1, h2 {
+  text-align: center
+}
+
 /* The progress container (grey background) */
 .progress-container {
   width: 100%;
