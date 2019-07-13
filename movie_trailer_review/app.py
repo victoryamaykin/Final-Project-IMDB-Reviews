@@ -1,24 +1,23 @@
-# #sklearn and ML
-# from sklearn.feature_extraction.text import CountVectorizer
-# from sklearn.feature_extraction.text import TfidfVectorizer
-# from sklearn.preprocessing import LabelBinarizer
-# from nltk.corpus import stopwords
-# from nltk.stem.porter import PorterStemmer
-# from wordcloud import WordCloud,STOPWORDS
-# from nltk.stem import WordNetLemmatizer
-# from nltk.tokenize import word_tokenize,sent_tokenize
+#sklearn and ML
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.preprocessing import LabelBinarizer
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+from wordcloud import WordCloud,STOPWORDS
+from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize,sent_tokenize
 # from bs4 import BeautifulSoup
-# import spacy
-# import re,string,unicodedata
-# from nltk.tokenize.toktok import ToktokTokenizer
-# from nltk.stem import LancasterStemmer,WordNetLemmatizer
-# from sklearn.linear_model import LogisticRegression,SGDClassifier
-# from sklearn.naive_bayes import MultinomialNB
-# from sklearn.svm import SVC
-# from textblob import TextBlob
-# from textblob import Word
-# from sklearn.metrics import classification_report,confusion_matrix,accuracy_score
-# import nltk
+import re,string,unicodedata
+from nltk.tokenize.toktok import ToktokTokenizer
+from nltk.stem import LancasterStemmer,WordNetLemmatizer
+from sklearn.linear_model import LogisticRegression,SGDClassifier
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.svm import SVC
+from textblob import TextBlob
+from textblob import Word
+from sklearn.metrics import classification_report,confusion_matrix,accuracy_score
+import nltk
 
 # import necessary libraries
 import os
@@ -66,16 +65,19 @@ class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     review = db.Column(db.String(255))
 
-# @app.before_first_request
-# def setup():
-#     # Recreate database each time for demo
-#     db.drop_all()
-#     db.create_all()
+@app.before_first_request
+def setup():
+    # Recreate database each time for demo
+    db.drop_all()
+    db.create_all()
 
 # create route that renders index.html template
 @app.route("/")
 def home():
-    return render_template("index.html")
+
+    table = engine.execute("SELECT * FROM reviews").fetchall()
+    
+    return render_template("index.html", table=table)
 
 
 # Query the database and send the jsonified results
@@ -96,7 +98,7 @@ def send():
 def clean_review():
     
      #Join all review words
-    results = db.session.query(Review.review).all()
+    results = engine.execute("SELECT * FROM reviews").fetchall()
 
     # id = [result[0] for result in results]
     review_words = [result[0] for result in results]
@@ -131,6 +133,9 @@ def clean_review():
         #Apply function on review column
         review_words=review_words.apply(remove_stopwords)
     
+    print(review_words)
+
+    return render_template("index.html", review_words=review_words)
 
 if __name__ == "__main__":
     app.run()

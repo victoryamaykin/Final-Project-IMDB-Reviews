@@ -29,11 +29,16 @@
         <div class="row">
           <div class="col-md-12">
             <h2>Look at all of the current reviews!</h2>
-            <table>
-              {% for row in results %}
+            <table style="text-align: center">
+              {% for row in table %}
               <tr>
                 <th> {{ row[1] }}</th>
               </tr> 
+                {% for row in review_words %}
+                <tr>
+                  <th> {{ row[1] }}</th>
+                </tr> 
+                {% endfor %}
               {% endfor %}
             </table>
           </div>
