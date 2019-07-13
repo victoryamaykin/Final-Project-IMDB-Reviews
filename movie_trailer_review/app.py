@@ -1,24 +1,24 @@
-#sklearn and ML
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.preprocessing import LabelBinarizer
-from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
-from wordcloud import WordCloud,STOPWORDS
-from nltk.stem import WordNetLemmatizer
-from nltk.tokenize import word_tokenize,sent_tokenize
-from bs4 import BeautifulSoup
-import spacy
-import re,string,unicodedata
-from nltk.tokenize.toktok import ToktokTokenizer
-from nltk.stem import LancasterStemmer,WordNetLemmatizer
-from sklearn.linear_model import LogisticRegression,SGDClassifier
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.svm import SVC
-from textblob import TextBlob
-from textblob import Word
-from sklearn.metrics import classification_report,confusion_matrix,accuracy_score
-import nltk
+# #sklearn and ML
+# from sklearn.feature_extraction.text import CountVectorizer
+# from sklearn.feature_extraction.text import TfidfVectorizer
+# from sklearn.preprocessing import LabelBinarizer
+# from nltk.corpus import stopwords
+# from nltk.stem.porter import PorterStemmer
+# from wordcloud import WordCloud,STOPWORDS
+# from nltk.stem import WordNetLemmatizer
+# from nltk.tokenize import word_tokenize,sent_tokenize
+# from bs4 import BeautifulSoup
+# import spacy
+# import re,string,unicodedata
+# from nltk.tokenize.toktok import ToktokTokenizer
+# from nltk.stem import LancasterStemmer,WordNetLemmatizer
+# from sklearn.linear_model import LogisticRegression,SGDClassifier
+# from sklearn.naive_bayes import MultinomialNB
+# from sklearn.svm import SVC
+# from textblob import TextBlob
+# from textblob import Word
+# from sklearn.metrics import classification_report,confusion_matrix,accuracy_score
+# import nltk
 
 # import necessary libraries
 import os
@@ -51,28 +51,26 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/reviews.sqlite"
 
 db = SQLAlchemy(app)
 
-# Base = automap_base()
+engine = create_engine("sqlite:///db/reviews.sqlite")
+conn = engine.connect()
+# Base.metadata.create_all(engine)
+
+session = Session(bind=engine)
+
+results = engine.execute("SELECT * FROM reviews").fetchall()
+print(results) 
 
 class Review(db.Model):
     __tablename__ = 'reviews'
-
+    
     id = db.Column(db.Integer, primary_key=True)
     review = db.Column(db.String(255))
-    sentiment = db.Column(db.Integer)
 
-# engine = create_engine("sqlite:///db/reviews.sqlite")
-# conn = engine.connect()
-
-# Base.prepare(engine, reflect=True) 
-# Review = Base.classes.review
-# session = Session(bind=engine) 
-
-
-@app.before_first_request
-def setup():
-    # Recreate database each time for demo
-    db.drop_all()
-    db.create_all()
+# @app.before_first_request
+# def setup():
+#     # Recreate database each time for demo
+#     db.drop_all()
+#     db.create_all()
 
 # create route that renders index.html template
 @app.route("/")
@@ -86,7 +84,7 @@ def send():
     if request.method == "POST":
         review = request.form["review"]
                 
-        review = Review(id=id, review=review)
+        review = Review(review=review)
         db.session.add(review)
         db.session.commit()
         return redirect("/", code=302)
@@ -98,11 +96,12 @@ def send():
 def clean_review():
     
      #Join all review words
-    results = db.session.query(Review).all()
+    results = db.session.query(Review.review).all()
 
-    id = [result[0] for result in results]
-    review_words = [result[1] for result in results]
-    sentiment = [result[2] for result in results]
+    # id = [result[0] for result in results]
+    review_words = [result[0] for result in results]
+    # sentiment = [result[2] for result in results]
+    return jsonify(review_words)
 
     #Tokenization of text
     import nltk

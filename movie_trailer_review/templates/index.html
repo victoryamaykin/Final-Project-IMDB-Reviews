@@ -29,7 +29,13 @@
         <div class="row">
           <div class="col-md-12">
             <h2>Look at all of the current reviews!</h2>
-            <div id="plot"></div>
+            <table>
+              {% for row in results %}
+              <tr>
+                <th> {{ row[1] }}</th>
+              </tr> 
+              {% endfor %}
+            </table>
           </div>
         </div>
       </div>
@@ -40,7 +46,6 @@
   
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+ 
 </body>
 </html>
