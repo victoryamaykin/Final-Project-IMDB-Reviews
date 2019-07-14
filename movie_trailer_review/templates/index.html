@@ -19,22 +19,45 @@
 
 </head>
 <body>
-     <h1 style="text-align: center">Fun with Machine Learning and Movie Trailer Reviews!</h1>
-     <div class="container">
+     <div class="header">
+        <div class="progress-container">
+          <div class="progress-bar" id="myBar"></div>
+        </div> 
+      </div>
+
+     <div class="container fluid">
         <div class="jumbotron" style="text-align: center">
           <h1>Please view the movie trailer and our model will predict whether your review is positive or negative:</h1>
           <a href="/send" class="btn btn-primary" role="button">Watch Trailer</a>
         </div>
-  
+
+<!-- <input type="integer" id="date" onkeyup="datesearch()" placeholder="Search by date, ex. 7/14/2019">
+
+<input type="text" id="review" onkeyup="reviewsearch()" placeholder="Search by words, ex. awesome"> -->
+
+<div class="container fluid">
         <div class="row">
           <div class="col-md-12">
             <h2>Look at all of the current reviews!</h2>
-            <table style="text-align: center">
+            <table id="myTable" class="display table table-bordered table-hover table-condensed">
+              <thead>
               {% for row in table %}
               <tr>
-                <th> {{ row[1] }}</th>
+                  <th>Date</th>
+                  <th>Reveiw Id#</th>
+                  <th>Review</th>
+                  <th>Sentiment</th>
+                  <th>Prediction</th>
               </tr> 
-              {% endfor %}
+              </thead>
+              <tbody>
+                <tr>
+                    <th> {{ row[3] }} </th>
+                    <th> {{ row[0] }}</th>
+                    <th> {{ row[1] }}</th>
+                </tr>
+                {% endfor %}
+              </tbody>
             </table>
 <hr>
                <table style="text-align: center">
@@ -47,11 +70,13 @@
           </div>
         </div>
       </div>
+    </div>
   
       <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.min.js"></script>
       <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
       <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-  
+      <script src="{{ url_for('static', filename='js/pureJSCalendar.js') }}"></script>
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
  
