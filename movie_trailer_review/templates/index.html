@@ -34,11 +34,14 @@
               <tr>
                 <th> {{ row[1] }}</th>
               </tr> 
-                {% for row in review_words %}
-                <tr>
-                  <th> {{ row[1] }}</th>
-                </tr> 
-                {% endfor %}
+              {% endfor %}
+            </table>
+<hr>
+               <table style="text-align: center">
+              {% for words in text %}
+              <tr>
+                <th> {{ words }}</th>
+              </tr> 
               {% endfor %}
             </table>
           </div>

@@ -21,21 +21,17 @@ import nltk
 
 # import necessary libraries
 import os
-from flask import (
-    Flask,
-    render_template,
-    jsonify,
-    request,
-    redirect)
+
+import pandas as pd
+import numpy as np
 
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
-
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import Session
 
 # Imports the method used for connecting to DBs
 from sqlalchemy import create_engine
+from sqlalchemy import desc
 
 # Imports the methods needed to abstract classes into tables
 from sqlalchemy.ext.declarative import declarative_base
@@ -43,32 +39,48 @@ from sqlalchemy.ext.declarative import declarative_base
 # Allow us to declare column types
 from sqlalchemy import Column, Integer, String, Float 
 
+from flask import (
+    Flask,
+    render_template,
+    jsonify,
+    request,
+    redirect)
+
+from flask_sqlalchemy import SQLAlchemy
+
 app = Flask(__name__)
 
+# DATABASE_URL will contain the database connection string:
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/reviews.sqlite"
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '')
 
+# Connects to the database using the app config
 db = SQLAlchemy(app)
 
 engine = create_engine("sqlite:///db/reviews.sqlite")
 conn = engine.connect()
-# Base.metadata.create_all(engine)
 
+# reflect an existing database into a new model
+Base = automap_base()
+# reflect the tables
+Base.prepare(db.engine, reflect=True)
+
+# prepare session to receive user inputs
 session = Session(bind=engine)
 
-results = engine.execute("SELECT * FROM reviews").fetchall()
-print(results) 
-
+# substatianate a class for columns
 class Review(db.Model):
     __tablename__ = 'reviews'
     
     id = db.Column(db.Integer, primary_key=True)
     review = db.Column(db.String(255))
 
+# Save references to each table
+Reviews = Base.classes.reviews
+
 @app.before_first_request
 def setup():
     # Recreate database each time for demo
-    db.drop_all()
+    # db.drop_all()
     db.create_all()
 
 # create route that renders index.html template
@@ -79,6 +91,14 @@ def home():
     
     return render_template("index.html", table=table)
 
+@app.route("/reviews")
+def reviews():
+    # Use Pandas to perform the sql query
+    stmt = db.session.query(Reviews).statement
+    df = pd.read_sql_query(stmt, db.session.bind)
+
+    # Return a list of the reviews
+    return jsonify(list(df["review"]))
 
 # Query the database and send the jsonified results
 @app.route("/send", methods=["GET", "POST"])
@@ -101,9 +121,9 @@ def clean_review():
     results = engine.execute("SELECT * FROM reviews").fetchall()
 
     # id = [result[0] for result in results]
-    review_words = [result[0] for result in results]
+    text = [result[1] for result in results]
     # sentiment = [result[2] for result in results]
-    return jsonify(review_words)
+    return jsonify(text)
 
     #Tokenization of text
     import nltk
@@ -117,7 +137,7 @@ def clean_review():
         text=re.sub(pattern,'',text)
         return text
         #Apply function on review column
-        review_words=review_words.apply(remove_special_characters)
+        text=text.apply(remove_special_characters)
     
     #removing the stopwords
     def remove_stopwords(text, is_lower_case=False):
@@ -131,11 +151,11 @@ def clean_review():
         return filtered_text
 
         #Apply function on review column
-        review_words=review_words.apply(remove_stopwords)
+        text=text.apply(remove_stopwords)
     
-    print(review_words)
+    print(text)
 
-    return render_template("index.html", review_words=review_words)
+    return render_template("index.html", text=text)
 
 if __name__ == "__main__":
     app.run()
