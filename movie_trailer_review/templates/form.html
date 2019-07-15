@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IMDB Deep Learning Movie Reviews with Bag of Words</title>
+<!--Mobile-first-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</head>
+<body>
+     <h1 style="text-align: center">Movie Trailer Review Survey</h1>
+     <div class="container">
+        <div class="jumbotron" style="text-align: center">
+          <h1>Please watch the movie trailer and give your review below</h1>
+          <iframe width="900" height="506" src="https://www.youtube.com/embed/0gugBiEkLwU" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <br>
+          <a href="/" class="btn btn-primary" role="button" style="text-align: center">Return and view all results</a>
+        </div>
+        <div class="row">
+          <div class="col-md-offset-2 col-md-8">
+            <h2>Enter your review of the movie trailer:</h2>
+            <form method="POST" action="/send" role="form", name="form">
+              <div class="form-group">
+                  <input type="text" class="form-control" id="inputDate" name="date" placeholder="date">
+
+                <input type="text" class="form-control" id="inputReview" name="review" placeholder="please enter your review and our model will predict the sentiment">
+              </div>
+              
+              <div style="align-content: center"><input type="submit" value="submit" class="btn btn-primary"></div>
+            </form>
+            <hr>
+
+          </div>
+        </div>
+        <div>Your review is: { predicition }</div>
+        <div>Click thumbs up or down if the prediction was accurate</div>
+      </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+</body>
+</html>

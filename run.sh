@@ -1,0 +1,1 @@
+FLASK_APP=movie_trailer_review/app.py flask run
