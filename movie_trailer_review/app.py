@@ -85,7 +85,7 @@ def setup():
 def home():
 
     table = engine.execute("SELECT * FROM reviews").fetchall()
-    
+    print(type(table))
     return render_template("index.html", table=table)
 
 @app.route("/reviews")
@@ -93,7 +93,6 @@ def reviews():
     # Use Pandas to perform the sql query
     stmt = db.session.query(Reviews).statement
     df = pd.read_sql_query(stmt, db.session.bind)
-    df['prediction'] = prediction
 
     # Return a list of the reviews
     return jsonify(df)
@@ -149,15 +148,18 @@ def prediction():
         accuracy = nltk.classify.util.accuracy(classifier,test_set)
         print(accuracy * 100)
 
-        words = words_tokenize(text)
+        words = word_tokenize(text)
         words = create_word_features(words)
 
         results = classifier.classify(words)
-        print(results)
-        predictions = [result[0] for result in results]
-        print(predictions)
 
-    return render_template("index.html", table=table)
+        print(results)
+        predictions = [result for result in results]
+        print(predictions)
+        df['prediction'] = predictions
+
+        return render_template("index.html")
 
 if __name__ == "__main__":
     app.run()
+
