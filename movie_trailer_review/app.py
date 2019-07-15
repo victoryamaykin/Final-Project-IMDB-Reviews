@@ -37,7 +37,7 @@ from sqlalchemy import desc
 from sqlalchemy.ext.declarative import declarative_base
 
 # Allow us to declare column types
-import datetime 
+import datetime
 from sqlalchemy import Column, Integer, String, Float, DateTime
 
 from flask import (
@@ -74,7 +74,6 @@ class Review(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     review = db.Column(db.String(255))
-    # date = db.Column(db.String(255))
 
 # Save references to each table
 Reviews = Base.classes.reviews
@@ -107,8 +106,6 @@ def reviews():
 def send():
     if request.method == "POST":
         review = request.form["review"]
-        date = request.form["date"]
-
         review = Review(review=review)
         db.session.add(review)
         db.session.commit()

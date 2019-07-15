@@ -38,12 +38,12 @@
 <div class="container fluid">
         <div class="row">
           <div class="col-md-12">
-            <h2>Look at all of the current reviews!</h2>
+            <h2>Here is a wordcloud of all of the current reviews!</h2>
+            <img href="../static/images/positive_wordcloud.png">
             <table id="myTable" class="display table table-bordered table-hover table-condensed">
               <thead>
               {% for row in table %}
               <tr>
-                  <th>Date</th>
                   <th>Reveiw Id#</th>
                   <th>Review</th>
                   <th>Sentiment</th>
@@ -52,7 +52,6 @@
               </thead>
               <tbody>
                 <tr>
-                    <th> {{ row[3] }} </th>
                     <th> {{ row[0] }}</th>
                     <th> {{ row[1] }}</th>
                 </tr>
@@ -60,13 +59,7 @@
               </tbody>
             </table>
 <hr>
-               <table style="text-align: center">
-              {% for words in text %}
-              <tr>
-                <th> {{ words }}</th>
-              </tr> 
-              {% endfor %}
-            </table>
+              
           </div>
         </div>
       </div>
