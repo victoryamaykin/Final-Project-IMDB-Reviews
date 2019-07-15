@@ -1,23 +1,23 @@
-#sklearn and ML
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.preprocessing import LabelBinarizer
-from nltk.corpus import stopwords
-from nltk.stem.porter import PorterStemmer
-from wordcloud import WordCloud,STOPWORDS
-from nltk.stem import WordNetLemmatizer
-from nltk.tokenize import word_tokenize,sent_tokenize
-# from bs4 import BeautifulSoup
-import re,string,unicodedata
-from nltk.tokenize.toktok import ToktokTokenizer
-from nltk.stem import LancasterStemmer,WordNetLemmatizer
-from sklearn.linear_model import LogisticRegression,SGDClassifier
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.svm import SVC
-from textblob import TextBlob
-from textblob import Word
-from sklearn.metrics import classification_report,confusion_matrix,accuracy_score
-import nltk
+# #sklearn and ML
+# from sklearn.feature_extraction.text import CountVectorizer
+# from sklearn.feature_extraction.text import TfidfVectorizer
+# from sklearn.preprocessing import LabelBinarizer
+# from nltk.corpus import stopwords
+# from nltk.stem.porter import PorterStemmer
+# from wordcloud import WordCloud,STOPWORDS
+# from nltk.stem import WordNetLemmatizer
+# from nltk.tokenize import word_tokenize,sent_tokenize
+# # from bs4 import BeautifulSoup
+# import re,string,unicodedata
+# from nltk.tokenize.toktok import ToktokTokenizer
+# from nltk.stem import LancasterStemmer,WordNetLemmatizer
+# from sklearn.linear_model import LogisticRegression,SGDClassifier
+# from sklearn.naive_bayes import MultinomialNB
+# from sklearn.svm import SVC
+# from textblob import TextBlob
+# from textblob import Word
+# from sklearn.metrics import classification_report,confusion_matrix,accuracy_score
+# import nltk
 
 # import necessary libraries
 import os
@@ -114,48 +114,48 @@ def send():
     return render_template("form.html")
 
 
-@app.route("/api/reviews")
-def clean_review():
+# @app.route("/api/reviews")
+# def clean_review():
     
-     #Join all review words
-    results = engine.execute("SELECT * FROM reviews").fetchall()
+#      #Join all review words
+#     results = engine.execute("SELECT * FROM reviews").fetchall()
 
-    # id = [result[0] for result in results]
-    text = [result[1] for result in results]
-    # sentiment = [result[2] for result in results]
-    return jsonify(text)
+#     # id = [result[0] for result in results]
+#     text = [result[1] for result in results]
+#     # sentiment = [result[2] for result in results]
+#     return jsonify(text)
 
-    #Tokenization of text
-    import nltk
-    nltk.download('stopwords')
-    tokenizer=ToktokTokenizer()
-    #Setting English stopwords
-    stopword_list=nltk.corpus.stopwords.words('english')
+#     #Tokenization of text
+#     import nltk
+#     nltk.download('stopwords')
+#     tokenizer=ToktokTokenizer()
+#     #Setting English stopwords
+#     stopword_list=nltk.corpus.stopwords.words('english')
    
-    def remove_special_characters(text, remove_digits=True):
-        pattern=r'[^a-zA-z0-9\s]'
-        text=re.sub(pattern,'',text)
-        return text
-        #Apply function on review column
-        text=text.apply(remove_special_characters)
+#     def remove_special_characters(text, remove_digits=True):
+#         pattern=r'[^a-zA-z0-9\s]'
+#         text=re.sub(pattern,'',text)
+#         return text
+#         #Apply function on review column
+#         text=text.apply(remove_special_characters)
     
-    #removing the stopwords
-    def remove_stopwords(text, is_lower_case=False):
-        tokens = tokenizer.tokenize(text)
-        tokens = [token.strip() for token in tokens]
-        if is_lower_case:
-            filtered_tokens = [token for token in tokens if token not in stopword_list]
-        else:
-            filtered_tokens = [token for token in tokens if token.lower() not in stopword_list]
-            filtered_text = ' '.join(filtered_tokens)    
-        return filtered_text
+#     #removing the stopwords
+#     def remove_stopwords(text, is_lower_case=False):
+#         tokens = tokenizer.tokenize(text)
+#         tokens = [token.strip() for token in tokens]
+#         if is_lower_case:
+#             filtered_tokens = [token for token in tokens if token not in stopword_list]
+#         else:
+#             filtered_tokens = [token for token in tokens if token.lower() not in stopword_list]
+#             filtered_text = ' '.join(filtered_tokens)    
+#         return filtered_text
 
-        #Apply function on review column
-        text=text.apply(remove_stopwords)
+#         #Apply function on review column
+#         text=text.apply(remove_stopwords)
     
-    print(text)
+#     print(text)
 
-    return render_template("index.html", text=text)
+#     return render_template("index.html", text=text)
 
 if __name__ == "__main__":
     app.run()
