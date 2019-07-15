@@ -1,23 +1,19 @@
-# #sklearn and ML
-# from sklearn.feature_extraction.text import CountVectorizer
-# from sklearn.feature_extraction.text import TfidfVectorizer
-# from sklearn.preprocessing import LabelBinarizer
-# from nltk.corpus import stopwords
-# from nltk.stem.porter import PorterStemmer
-# from wordcloud import WordCloud,STOPWORDS
-# from nltk.stem import WordNetLemmatizer
-# from nltk.tokenize import word_tokenize,sent_tokenize
-# # from bs4 import BeautifulSoup
-# import re,string,unicodedata
-# from nltk.tokenize.toktok import ToktokTokenizer
-# from nltk.stem import LancasterStemmer,WordNetLemmatizer
-# from sklearn.linear_model import LogisticRegression,SGDClassifier
-# from sklearn.naive_bayes import MultinomialNB
-# from sklearn.svm import SVC
-# from textblob import TextBlob
-# from textblob import Word
-# from sklearn.metrics import classification_report,confusion_matrix,accuracy_score
-# import nltk
+import nltk.classify.util
+from nltk.classify import NaiveBayesClassifier
+from nltk.corpus import movie_reviews
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.corpus import wordnet
+import nltk
+nltk.download('punkt')
+import nltk
+nltk.download('averaged_perceptron_tagger')
+import nltk
+nltk.download('tagsets')
+import nltk
+nltk.download('wordnet')
+import nltk
+nltk.download('movie_reviews')
 
 # import necessary libraries
 import os
@@ -97,9 +93,10 @@ def reviews():
     # Use Pandas to perform the sql query
     stmt = db.session.query(Reviews).statement
     df = pd.read_sql_query(stmt, db.session.bind)
+    df['prediction'] = prediction
 
     # Return a list of the reviews
-    return jsonify(list(df["review"]))
+    return jsonify(df)
 
 # Query the database and send the jsonified results
 @app.route("/send", methods=["GET", "POST"])
@@ -114,48 +111,53 @@ def send():
     return render_template("form.html")
 
 
-# @app.route("/api/reviews")
-# def clean_review():
-    
-#      #Join all review words
-#     results = engine.execute("SELECT * FROM reviews").fetchall()
+@app.route("/api/reviews")
+def prediction(): 
+    #this is how Naive Bayes classifier expects the input
+    def create_word_features(words):
+        #Join all review words
+        results = engine.execute("SELECT * FROM reviews").fetchall()
 
-#     # id = [result[0] for result in results]
-#     text = [result[1] for result in results]
-#     # sentiment = [result[2] for result in results]
-#     return jsonify(text)
+        text = [result[1] for result in results]
+        print(text)
+        useful_words = [word for word in words if word not in stopwords.words("english")]
+        my_dict = dict([(word, True) for word in useful_words])
+        return my_dict 
 
-#     #Tokenization of text
-#     import nltk
-#     nltk.download('stopwords')
-#     tokenizer=ToktokTokenizer()
-#     #Setting English stopwords
-#     stopword_list=nltk.corpus.stopwords.words('english')
-   
-#     def remove_special_characters(text, remove_digits=True):
-#         pattern=r'[^a-zA-z0-9\s]'
-#         text=re.sub(pattern,'',text)
-#         return text
-#         #Apply function on review column
-#         text=text.apply(remove_special_characters)
-    
-#     #removing the stopwords
-#     def remove_stopwords(text, is_lower_case=False):
-#         tokens = tokenizer.tokenize(text)
-#         tokens = [token.strip() for token in tokens]
-#         if is_lower_case:
-#             filtered_tokens = [token for token in tokens if token not in stopword_list]
-#         else:
-#             filtered_tokens = [token for token in tokens if token.lower() not in stopword_list]
-#             filtered_text = ' '.join(filtered_tokens)    
-#         return filtered_text
+        neg_reviews = []
+        for fileid in movie_reviews.fileids('neg'):
+            words = movie_reviews.words(fileid)
+            neg_reviews.append((create_word_features(words),"negative"))
+        print(neg_reviews[0])
+        print(len(neg_reviews))
 
-#         #Apply function on review column
-#         text=text.apply(remove_stopwords)
-    
-#     print(text)
+        pos_reviews = []
+        for fileid in movie_reviews.fileids('pos'):
+            words = movie_reviews.words(fileid)
+            pos_reviews.append((create_word_features(words),"positive"))
+        #print(pos_reviews[0])
+        print(len(pos_reviews))
 
-#     return render_template("index.html", text=text)
+        train_set = neg_reviews[:750] +  pos_reviews[:750]
+        test_set = neg_reviews[750:] + pos_reviews[750:]
+        print(len(train_set), len(test_set))
+
+        #train the classifier
+        classifier = NaiveBayesClassifier.train(train_set)
+
+        #find accuracy percentage
+        accuracy = nltk.classify.util.accuracy(classifier,test_set)
+        print(accuracy * 100)
+
+        words = words_tokenize(text)
+        words = create_word_features(words)
+
+        results = classifier.classify(words)
+        print(results)
+        predictions = [result[0] for result in results]
+        print(predictions)
+
+    return render_template("index.html", table=table)
 
 if __name__ == "__main__":
     app.run()

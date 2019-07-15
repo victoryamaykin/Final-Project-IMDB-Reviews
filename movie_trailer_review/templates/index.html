@@ -46,7 +46,6 @@
               <tr>
                   <th>Reveiw Id#</th>
                   <th>Review</th>
-                  <th>Sentiment</th>
                   <th>Prediction</th>
               </tr> 
               </thead>
@@ -54,6 +53,7 @@
                 <tr>
                     <th> {{ row[0] }}</th>
                     <th> {{ row[1] }}</th>
+                    <th>{{ row[2] }}</th>
                 </tr>
                 {% endfor %}
               </tbody>
