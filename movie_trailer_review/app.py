@@ -70,6 +70,7 @@ class Review(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     review = db.Column(db.String(255))
+    # prediction = db.Column(db.String(255))
 
 # Save references to each table
 Reviews = Base.classes.reviews
@@ -97,23 +98,9 @@ def reviews():
     # Return a list of the reviews
     return jsonify(df)
 
-# Query the database and send the jsonified results
-@app.route("/send", methods=["GET", "POST"])
-def send():
-    if request.method == "POST":
-        review = request.form["review"]
-        review = Review(review=review)
-        db.session.add(review)
-        db.session.commit()
-        return redirect("/", code=302)
 
-    return render_template("form.html")
-
-
-@app.route("/api/reviews")
-def prediction(): 
     #this is how Naive Bayes classifier expects the input
-    def create_word_features(words):
+def create_word_features(words):
         #Join all review words
         results = engine.execute("SELECT * FROM reviews").fetchall()
 
@@ -158,7 +145,19 @@ def prediction():
         print(predictions)
         df['prediction'] = predictions
 
-        return render_template("index.html")
+        return jsonify(df)
+
+# Query the database and send the jsonified results
+@app.route("/send", methods=["GET", "POST"])
+def send():
+    if request.method == "POST":
+        review = request.form["review"]
+        review = Review(review=review)
+        db.session.add(review)
+        db.session.commit()
+        return redirect("/", code=302)
+
+    return render_template("form.html")
 
 if __name__ == "__main__":
     app.run()

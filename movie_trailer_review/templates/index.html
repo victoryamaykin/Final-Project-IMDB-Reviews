@@ -38,7 +38,7 @@
 <div class="container fluid">
         <div class="row">
           <div class="col-md-12">
-            <h2>Here is a wordcloud of all of the current reviews!</h2>
+            <h2>Here are all of the current reviews!</h2>
             <img href="../static/images/positive_wordcloud.png">
             <table id="myTable" class="display table table-bordered table-hover table-condensed">
               <thead>
@@ -53,13 +53,14 @@
                 <tr>
                     <th> {{ row[0] }}</th>
                     <th> {{ row[1] }}</th>
-                    <th>{{ row[2] }}</th>
+                    <th>{{ prediction }}</th>
                 </tr>
                 {% endfor %}
               </tbody>
             </table>
 <hr>
-              
+              <img src="../static/images/positive_wordcloud.png" alt="wordcloud of positive review">
+              <img src="../static/images/negative_wordcloud.png" alt="wordcloud of positive review">
           </div>
         </div>
       </div>
