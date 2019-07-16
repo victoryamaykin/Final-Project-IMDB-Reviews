@@ -1,19 +1,19 @@
-import nltk.classify.util
-from nltk.classify import NaiveBayesClassifier
-from nltk.corpus import movie_reviews
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-from nltk.corpus import wordnet
-import nltk
-nltk.download('punkt')
-import nltk
-nltk.download('averaged_perceptron_tagger')
-import nltk
-nltk.download('tagsets')
-import nltk
-nltk.download('wordnet')
-import nltk
-nltk.download('movie_reviews')
+# import nltk.classify.util
+# from nltk.classify import NaiveBayesClassifier
+# from nltk.corpus import movie_reviews
+# from nltk.corpus import stopwords
+# from nltk.tokenize import word_tokenize
+# from nltk.corpus import wordnet
+# import nltk
+# nltk.download('punkt')
+# import nltk
+# nltk.download('averaged_perceptron_tagger')
+# import nltk
+# nltk.download('tagsets')
+# import nltk
+# nltk.download('wordnet')
+# import nltk
+# nltk.download('movie_reviews')
 
 # import necessary libraries
 import os
@@ -33,8 +33,7 @@ from sqlalchemy import desc
 from sqlalchemy.ext.declarative import declarative_base
 
 # Allow us to declare column types
-import datetime
-from sqlalchemy import Column, Integer, String, Float, DateTime
+from sqlalchemy import Column, Integer, String, Float
 
 from flask import (
     Flask,
@@ -54,17 +53,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/reviews.sqlite"
 db = SQLAlchemy(app)
 
 engine = create_engine("sqlite:///db/reviews.sqlite")
-conn = engine.connect()
+# c = engine.connect()
 
 # reflect an existing database into a new model
 Base = automap_base()
 # reflect the tables
 Base.prepare(db.engine, reflect=True)
 
-# prepare session to receive user inputs
-session = Session(bind=engine)
+Base.metadata.create_all(engine)
 
-# substatianate a class for columns
 class Review(db.Model):
     __tablename__ = 'reviews'
     
@@ -75,10 +72,13 @@ class Review(db.Model):
 # Save references to each table
 Reviews = Base.classes.reviews
 
+# prepare session to receive user inputs
+session = Session(engine)
+
 @app.before_first_request
 def setup():
     # Recreate database each time for demo
-    # db.drop_all()
+    db.drop_all()
     db.create_all()
 
 # create route that renders index.html template
@@ -100,52 +100,52 @@ def reviews():
 
 
     #this is how Naive Bayes classifier expects the input
-def create_word_features(words):
-        #Join all review words
-        results = engine.execute("SELECT * FROM reviews").fetchall()
+# def create_word_features(words):
+#         #Join all review words
+#         results = engine.execute("SELECT * FROM reviews").fetchall()
 
-        text = [result[1] for result in results]
-        print(text)
-        useful_words = [word for word in words if word not in stopwords.words("english")]
-        my_dict = dict([(word, True) for word in useful_words])
-        return my_dict 
+#         text = [result[1] for result in results]
+#         print(text)
+#         useful_words = [word for word in words if word not in stopwords.words("english")]
+#         my_dict = dict([(word, True) for word in useful_words])
+#         return my_dict 
 
-        neg_reviews = []
-        for fileid in movie_reviews.fileids('neg'):
-            words = movie_reviews.words(fileid)
-            neg_reviews.append((create_word_features(words),"negative"))
-        print(neg_reviews[0])
-        print(len(neg_reviews))
+#         neg_reviews = []
+#         for fileid in movie_reviews.fileids('neg'):
+#             words = movie_reviews.words(fileid)
+#             neg_reviews.append((create_word_features(words),"negative"))
+#         print(neg_reviews[0])
+#         print(len(neg_reviews))
 
-        pos_reviews = []
-        for fileid in movie_reviews.fileids('pos'):
-            words = movie_reviews.words(fileid)
-            pos_reviews.append((create_word_features(words),"positive"))
-        #print(pos_reviews[0])
-        print(len(pos_reviews))
+#         pos_reviews = []
+#         for fileid in movie_reviews.fileids('pos'):
+#             words = movie_reviews.words(fileid)
+#             pos_reviews.append((create_word_features(words),"positive"))
+#         #print(pos_reviews[0])
+#         print(len(pos_reviews))
 
-        train_set = neg_reviews[:750] +  pos_reviews[:750]
-        test_set = neg_reviews[750:] + pos_reviews[750:]
-        print(len(train_set), len(test_set))
+#         train_set = neg_reviews[:750] +  pos_reviews[:750]
+#         test_set = neg_reviews[750:] + pos_reviews[750:]
+#         print(len(train_set), len(test_set))
 
-        #train the classifier
-        classifier = NaiveBayesClassifier.train(train_set)
+#         #train the classifier
+#         classifier = NaiveBayesClassifier.train(train_set)
 
-        #find accuracy percentage
-        accuracy = nltk.classify.util.accuracy(classifier,test_set)
-        print(accuracy * 100)
+#         #find accuracy percentage
+#         accuracy = nltk.classify.util.accuracy(classifier,test_set)
+#         print(accuracy * 100)
 
-        words = word_tokenize(text)
-        words = create_word_features(words)
+#         words = word_tokenize(text)
+#         words = create_word_features(words)
 
-        results = classifier.classify(words)
+#         results = classifier.classify(words)
 
-        print(results)
-        predictions = [result for result in results]
-        print(predictions)
-        df['prediction'] = predictions
+#         print(results)
+#         predictions = [result for result in results]
+#         print(predictions)
+#         df['prediction'] = predictions
 
-        return jsonify(df)
+#         return jsonify(df)
 
 # Query the database and send the jsonified results
 @app.route("/send", methods=["GET", "POST"])
