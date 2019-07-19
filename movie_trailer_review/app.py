@@ -47,12 +47,12 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 # DATABASE_URL will contain the database connection string:
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///db/reviews.sqlite"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///reviews.sqlite"
 
 # Connects to the database using the app config
 db = SQLAlchemy(app)
 
-engine = create_engine("sqlite:///db/reviews.sqlite")
+engine = create_engine("sqlite:///reviews.sqlite")
 # c = engine.connect()
 
 # reflect an existing database into a new model
