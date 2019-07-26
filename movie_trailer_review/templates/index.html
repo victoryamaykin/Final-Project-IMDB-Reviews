@@ -15,7 +15,8 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-
+<!-- font awesome-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
 
 </head>
 <body>
@@ -31,9 +32,6 @@
           <a href="/send" class="btn btn-primary" role="button">Watch Trailer</a>
         </div>
 
-<!-- <input type="integer" id="date" onkeyup="datesearch()" placeholder="Search by date, ex. 7/14/2019">
-
-<input type="text" id="review" onkeyup="reviewsearch()" placeholder="Search by words, ex. awesome"> -->
 
 <div class="container fluid">
         <div class="row">
@@ -42,7 +40,6 @@
             <img href="../static/images/positive_wordcloud.png">
             <table id="myTable" class="display table table-bordered table-hover table-condensed">
               <thead>
-              {% for row in table %}
               <tr>
                   <th>Reveiw Id#</th>
                   <th>Review</th>
@@ -50,10 +47,23 @@
               </tr> 
               </thead>
               <tbody>
+                  {% for row in table %}
                 <tr>
-                    <th> {{ row[0] }}</th>
-                    <th> {{ row[1] }}</th>
-                    <th>{{ prediction }}</th>
+                    <th> {{ row.id }}</th>
+                    <th> {{ row.review }}</th>
+                    <td>
+                    <form method="POST" action="./update">
+                      <input type="hidden" value="{{ row.review }}" name="oldreview">
+                      <input type="text" value="{{ row.review }}" name="newreview">
+                      <input type="submit" value="Edit">
+                    </form>
+                    </td>
+                    <td>
+                    <form method="POST" action="./delete">
+                      <input type="hidden" value="{{row.review}}" name="review">
+                      <input type="submit" value="Delete">
+                    </form> 
+                    </td> 
                 </tr>
                 {% endfor %}
               </tbody>
@@ -62,12 +72,12 @@
           </div>
         </div>
 <div class="row">
+  <div class="col-12">
+    <h3>Word clouds of our training dataset:</h3>
+  </div>
+
   <div class="col-sm-12 col-md-4">
     <img src="../static/images/bag.jpg" alt="popcorn">
-
-  </div>
-  <div class="col-sm-12 col-md-4">
-    <img src="../static/images/positive_wordcloud.png" alt="wordcloud of positive review">
 
   </div>
   <div class="col-sm-12 col-md-4">
@@ -76,6 +86,9 @@
   </div>
 
 </div>
+
+<a class="to-top" href="#"><i class="fas fa-angle-double-up"></i></a>
+
 </div>
   
       <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.min.js"></script>
