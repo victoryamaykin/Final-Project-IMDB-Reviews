@@ -35,3 +35,51 @@
       border-radius: 50%;
     }
   
+.center {
+      display: block;
+  margin-left: auto;
+  margin-right: auto;
+    }
+
+    .switch {
+      align-self: flex-end;
+      margin: 0.9375rem;
+    }
+    .inner-switch {
+      display: inline-block;
+      cursor: pointer;
+      border: 1px solid #555;
+      border-radius: 1.25rem;
+      width: 3.125rem;
+      text-align: center;
+      font-size: 1rem;
+      padding: 0.1875rem;
+      margin-left: 0.3125rem;
+    }
+    
+    .dark,
+    .dark * {
+        background-color: #222;
+        color: #e6e6e6;
+        border-color: #e6e6e6;
+    }
+ 
+    #myBtn {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 30px;
+      z-index: 99;
+      font-size: 18px;
+      border: none;
+      outline: none;
+      background-color: rgb(19, 3, 90);
+      color: white;
+      cursor: pointer;
+      padding: 15px;
+      border-radius: 4px;
+    }
+    
+    #myBtn:hover {
+      background-color: rgb(168, 2, 10);
+    }
