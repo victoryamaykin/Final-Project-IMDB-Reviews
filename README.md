@@ -19,6 +19,10 @@ Confusion Matrix for each model
 Range bar chart to compare scores between two models across # of epochs 
 Bubble charts of word frequency for positive and negative reviews 
 
+### Results
+
+![Confusion matrix for machine learning model](f1-scores-bow-tfidf.JPG)
+
 Helpful links:
 Animated guide to machine learning: http://www.r2d3.us/visual-intro-to-machine-learning-part-1/
 
