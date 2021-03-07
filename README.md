@@ -2,11 +2,13 @@
 UNC Data Analytics Bootcamp Capstone Project: Comparing Deep Learning Models on IMDB Movie Review Sentiment Analysis
 Team: Ali, Chris, Lissette, Shannon, Victor
 
-Goals and insights: Determine whether a movie review is positive or negative and check if there is a dfference in accuracy between Deep and non-deep learning methods
+## Goals and insights
+Determine whether a movie review is positive or negative and check if there is a dfference in accuracy between Deep and non-deep learning methods
 
-Skills: (3 different models - Non - deep learning model with KNN and SVM, Deep Learning using Tensforflow/Keras, Bag of Words model) --- Ali, Chris, and Lissette
+### Skills
+(3 different models - Non - deep learning model with KNN and SVM, Deep Learning using Tensforflow/Keras, Bag of Words model) --- Ali, Chris, and Lissette
 
-Data preprocessing: 
+### Data preprocessing
 BeautifulSoup to scrape reviews in dataset
 NLTK to get a list of stop words
 SciKit-Learn, RandomForest Classifier, Bag of Words (CountVectorizer) model to create train and test datasets
