@@ -207,7 +207,7 @@ python-language-server @ file:///tmp/build/80754af9/python-language-server_16004
 pytz==2019.3
 pyviz-comms==0.7.6
 PyWavelets @ file:///opt/concourse/worker/volumes/live/ea36e10f-66e8-43ae-511e-c4092764493f/volume/pywavelets_1601658378672/work
-PyYAML==5.3.1
+PyYAML==5.4
 pyzmq==19.0.2
 QDarkStyle==2.8.1
 QtAwesome @ file:///tmp/build/80754af9/qtawesome_1602272867890/work
