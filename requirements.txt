@@ -192,7 +192,7 @@ pyflakes==2.2.0
 PyGithub==1.53
 Pygments @ file:///tmp/build/80754af9/pygments_1604103097372/work
 pyicloud==0.9.7
-PyJWT==1.7.1
+PyJWT==2.4.0
 pylint @ file:///opt/concourse/worker/volumes/live/ed0164b6-bcc7-4f6b-7dd4-ad89660b5dcb/volume/pylint_1598624018129/work
 pymongo==3.11.0
 pyodbc===4.0.0-unsupported
